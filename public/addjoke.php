@@ -7,6 +7,11 @@ if (isset($_POST['joketext'])) {
                 'ijdbuser',
                 'mypassword'
             );
+        $sql = 'INSERT INTO `joke` SET
+            `joketext` = "' . $_POST['joketext'] . '", `jokedate` = "2021-02-04"';
+        $pdo->exec($sql);
+        $output = 'Joke added';
+        $title = 'Joke added';
     } catch (PDOException $e) {
         $title = 'An error has occurred';
         $output = 'Database error: ' . $e->getMessage() . ' in '
