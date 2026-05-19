@@ -8,10 +8,13 @@ if (isset($_POST['joketext'])) {
                 'mypassword'
             );
         $sql = 'INSERT INTO `joke` SET
-            `joketext` = "' . $_POST['joketext'] . '", `jokedate` = "2021-02-04"';
-        $pdo->exec($sql);
-        $output = 'Joke added';
-        $title = 'Joke added';
+ `joketext` = :joketext,
+ `jokedate` = CURDATE()';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':joketext', $_POST['joketext']);
+        $stmt->execute();
+        header('location: jokes.php');
+        exit;
     } catch (PDOException $e) {
         $title = 'An error has occurred';
         $output = 'Database error: ' . $e->getMessage() . ' in '
