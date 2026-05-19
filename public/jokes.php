@@ -6,11 +6,10 @@ try {
             'ijdbuser',
             'mypassword'
         );
-    $sql = 'SELECT `joketext` FROM `joke`';
-    $result = $pdo->query($sql);
-    while ($row = $result->fetch()) {
-        $jokes[] = $row['joketext'];
-    }
+    $sql = 'SELECT `joke`.`id`, `joketext`, `name`, `email`
+            FROM `joke` INNER JOIN `author`
+            ON `authorid` = `author`.`id`';
+    $jokes = $pdo->query($sql);
     $title = 'Joke list';
     ob_start();
     // Include the template. The PHP code will be executed,
