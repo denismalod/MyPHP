@@ -2,12 +2,8 @@
 if (isset($_POST['joketext'])) {
     try {
         include __DIR__ . '/../includes/DatabaseConnection.php';
-        $sql = 'INSERT INTO `joke` SET
- `joketext` = :joketext,
- `jokedate` = CURDATE()';
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':joketext', $_POST['joketext']);
-        $stmt->execute();
+        include __DIR__ . '/../includes/DatabaseFunctions.php';
+        insertJoke($pdo, $_POST['joketext'], 1);
         header('location: jokes.php');
         exit;
     } catch (PDOException $e) {

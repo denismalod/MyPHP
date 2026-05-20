@@ -1,11 +1,11 @@
 <?php
 try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
-    $sql = 'SELECT `joke`.`id`, `joketext`, `name`, `email`
-            FROM `joke` INNER JOIN `author`
-            ON `authorid` = `author`.`id`';
-    $jokes = $pdo->query($sql);
+    include __DIR__ . '/../includes/DatabaseFunctions.php';
+    $jokes = allJokes($pdo);
     $title = 'Joke list';
+    $totalJokes = totalJokes($pdo);
+
     ob_start();
     // Include the template. The PHP code will be executed,
     // but the resulting HTML will be stored in the buffer
