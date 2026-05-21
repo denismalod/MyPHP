@@ -3,7 +3,16 @@ if (isset($_POST['joketext'])) {
     try {
         include __DIR__ . '/../includes/DatabaseConnection.php';
         include __DIR__ . '/../includes/DatabaseFunctions.php';
-        insertJoke($pdo, $_POST['joketext'], 1);
+        insert(
+            $pdo,
+            'joke',
+            [
+                'authorId' => 1,
+                'jokeText' => $_POST['joketext'],
+                'jokedate' => new DateTime()
+            ]
+        );
+
         header('location: jokes.php');
         exit;
     } catch (PDOException $e) {

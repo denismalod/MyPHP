@@ -4,12 +4,17 @@ try {
     include __DIR__ . '/../includes/DatabaseFunctions.php';
 
     if (isset($_POST['joketext'])) {
-        updateJoke(
+        update(
             $pdo,
-            $_POST['jokeid'],
-            $_POST['joketext'],
-            1
+            'joke',
+            'id',
+            [
+                'id' => $_POST['jokeid'],
+                'joketext' => $_POST['joketext'],
+                'authorId' => 1
+            ]
         );
+
         header('location: jokes.php');
     } else {
         $joke = getJoke($pdo, $_GET['id']);
