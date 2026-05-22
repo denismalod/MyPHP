@@ -1,16 +1,13 @@
 <?php
 try {
     include __DIR__ . '/../includes/DatabaseConnection.php';
-    include __DIR__ . '/../includes/DatabaseFunctions.php';
-    $result = findAll($pdo, 'joke');
+    include __DIR__ . '/../classes/DatabaseTable.php';
+    $jokesTable = new DatabaseTable($pdo, 'joke', 'id');
+    $authorsTable = new DatabaseTable($pdo, 'author', 'id');
+    $result = $jokesTable->findAll();
     $jokes = [];
     foreach ($result as $joke) {
-        $author = find(
-            $pdo,
-            'author',
-            'id',
-            $joke['authorid']
-        )[0];
+        $author = $authorsTable->find('id', $joke['authorId'])[0];
         $jokes[] = [
             'id' => $joke['id'],
             'joketext' => $joke['joketext'],
@@ -21,7 +18,7 @@ try {
     }
 
     $title = 'Joke list';
-    $totalJokes = totalJokes($pdo);
+    $totalJokes = $jokesTable->total();
 
     ob_start();
     // Include the template. The PHP code will be executed,
