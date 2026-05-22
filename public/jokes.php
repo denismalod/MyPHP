@@ -7,7 +7,7 @@ try {
     $result = $jokesTable->findAll();
     $jokes = [];
     foreach ($result as $joke) {
-        $author = $authorsTable->find('id', $joke['authorId'])[0];
+        $author = $authorsTable->find('id', $joke['authorid'])[0];
         $jokes[] = [
             'id' => $joke['id'],
             'joketext' => $joke['joketext'],
