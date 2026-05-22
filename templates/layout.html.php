@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="jokes.css">
-    <title><?= $title ?></title>
+    <title><?= $title ?? "Internet Joke Database" ?></title>
 </head>
 
 <body>
@@ -14,8 +14,8 @@
     <nav>
         <ul>
             <li><a href="index.php">Home</a></li>
-            <li><a href="jokes.php">Jokes List</a></li>
-            <li><a href="editjoke.php">Add a new Joke</a></li>
+            <li><a href="index.php?list">Jokes List</a></li>
+            <li><a href="index.php?edit">Add a new Joke</a></li>
         </ul>
     </nav>
     <main>
