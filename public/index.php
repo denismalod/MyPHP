@@ -9,15 +9,8 @@ try {
         $jokesTable,
         $authorsTable
     );
-    if (isset($_GET['edit'])) {
-        $page = $jokeController->edit();
-    } else if (isset($_GET['delete'])) {
-        $page = $jokeController->delete();
-    } else if (isset($_GET['list'])) {
-        $page = $jokeController->list();
-    } else {
-        $page = $jokeController->home();
-    }
+    $action = $_GET['action'] ?? 'home';
+    $page = $jokeController->$action();
     $title = $page['title'];
     $output = $page['output'];
 } catch (PDOException $e) {

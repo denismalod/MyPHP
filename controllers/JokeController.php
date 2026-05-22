@@ -45,7 +45,7 @@ class JokeController
             $joke['jokedate'] = new DateTime();
             $joke['authorid'] = 1;
             $this->jokesTable->save($joke);
-            header('location: index.php?list');
+            header('location: index.php?action=list');
         } else {
             if (isset($_GET['id'])) {
                 $joke = $this->jokesTable->find('id', $_GET['id'])[0] ??
@@ -64,6 +64,6 @@ class JokeController
     public function delete()
     {
         $this->jokesTable->delete('id', $_POST['id']);
-        header('location: index.php?list');
+        header('location: index.php?action=list');
     }
 }
