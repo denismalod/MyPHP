@@ -39,18 +39,17 @@ class JokeController
         ];
     }
 
-    public function edit()
+    public function edit($id = null)
     {
         if (isset($_POST['joke'])) {
             $joke = $_POST['joke'];
             $joke['jokedate'] = new DateTime();
             $joke['authorid'] = 1;
             $this->jokesTable->save($joke);
-            header('location: index.php?action=list');
+            header('location: /joke/list');
         } else {
-            if (isset($_GET['id'])) {
-                $joke = $this->jokesTable->find('id', $_GET['id'])[0] ??
-                    null;
+            if (isset($id)) {
+                $joke = $this->jokesTable->find('id', $id)[0] ?? null;
             } else {
                 $joke = null;
             }
@@ -68,6 +67,6 @@ class JokeController
     public function delete()
     {
         $this->jokesTable->delete('id', $_POST['id']);
-        header('location: index.php?action=list');
+        header('location: /joke/list');
     }
 }
