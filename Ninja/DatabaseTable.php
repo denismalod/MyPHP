@@ -49,8 +49,7 @@ class DatabaseTable
             $query .= '`' . $key . '` = :' . $key . ',';
         }
         $query = rtrim($query, ',');
-        $query .= ' WHERE `' . $this->primaryKey . '` =
-:primaryKey';
+        $query .= ' WHERE `' . $this->primaryKey . '` =:primaryKey';
         // Set the :primaryKey variable
         $values['primaryKey'] = $values['id'];
         $values = $this->processDates($values);
