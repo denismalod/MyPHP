@@ -29,12 +29,18 @@ class Author
             $errors[] = 'Email cannot be blank';
         } else if (filter_var($author['email'], FILTER_VALIDATE_EMAIL) == false) {
             $errors[] = 'Invalid email format';
+        } else {
+            $author['email'] = strtolower($author['email']);
+            if (count($this->authorsTable->find('email', $author['email'])) > 0) {
+                $errors[] = 'Email address is already registered';
+            }
         }
         if (empty($author['password'])) {
             $errors[] = 'Password cannot be blank';
         }
         // If the $errors array is still empty, no fields were blank and the data can be added
         if (empty($errors)) {
+            $author['password'] = password_hash($author['password'], PASSWORD_DEFAULT);
             $this->authorsTable->save($author);
             header('Location: /author/success');
         } else {
