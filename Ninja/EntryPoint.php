@@ -5,7 +5,8 @@ namespace Ninja;
 class EntryPoint
 {
     public function __construct(private $website) {}
-    public function run($uri)
+
+    public function run($uri, $method)
     {
         try {
             $this->checkUri($uri);
@@ -15,6 +16,9 @@ class EntryPoint
             $route = explode('/', $uri);
             $controllerName = array_shift($route);
             $action = array_shift($route);
+            if ($method === 'POST') {
+                $action .= 'Submit';
+            }
             $controller = $this->website->getController($controllerName);
             $page = $controller->$action(...$route);
             $title = $page['title'];
