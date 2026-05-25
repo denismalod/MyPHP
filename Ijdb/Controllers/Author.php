@@ -27,6 +27,8 @@ class Author
         }
         if (empty($author['email'])) {
             $errors[] = 'Email cannot be blank';
+        } else if (filter_var($author['email'], FILTER_VALIDATE_EMAIL) == false) {
+            $errors[] = 'Invalid email format';
         }
         if (empty($author['password'])) {
             $errors[] = 'Password cannot be blank';
