@@ -1,5 +1,10 @@
 <?php
-class AuthorController
+
+namespace Ijdb\controllers;
+
+use \Ninja\DatabaseTable;
+
+class Author
 {
     public function __construct(private DatabaseTable $authorsTable) {}
 
@@ -30,4 +35,3 @@ class AuthorController
         ];
     }
 }
-       

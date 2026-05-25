@@ -1,4 +1,7 @@
 <?php
+
+namespace Ijdb;
+
 class JokeWebsite
 {
     public function getDefaultRoute()
@@ -7,22 +10,24 @@ class JokeWebsite
     }
     public function getController(string $controllerName)
     {
-        include __DIR__ . '/../includes/DatabaseConnection.php';
-        include __DIR__ . '/../controllers/JokeController.php';
-        include __DIR__ . '/../controllers/AuthorController.php';
-        $jokesTable = new DatabaseTable($pdo, 'joke', 'id');
-        $authorsTable = new DatabaseTable(
+        $pdo = new \PDO(
+            'mysql:host=127.0.0.1:3306;dbname=ijdb;charset=utf8mb4',
+            'ijdbuser',
+            'mypassword'
+        );
+        $jokesTable = new \Ninja\DatabaseTable($pdo, 'joke', 'id');
+        $authorsTable = new \Ninja\DatabaseTable(
             $pdo,
             'author',
             'id'
         );
         if ($controllerName === 'joke') {
-            $controller = new JokeController(
+            $controller = new \Ijdb\controllers\Joke(
                 $jokesTable,
                 $authorsTable
             );
         } else if ($controllerName === 'author') {
-            $controller = new AuthorController($authorsTable);
+            $controller = new \Ijdb\controllers\Author($authorsTable);
         }
         return $controller;
     }

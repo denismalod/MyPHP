@@ -1,4 +1,7 @@
 <?php
+
+namespace Ninja;
+
 class EntryPoint
 {
     public function __construct(private $website) {}
@@ -20,7 +23,7 @@ class EntryPoint
                 $page['template'],
                 $variables
             );
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $title = 'An error has occurred';
             $output = 'Database error: ' . $e->getMessage() . 'in ' .
                 $e->getFile() . ':' . $e->getLine();

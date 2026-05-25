@@ -1,5 +1,10 @@
 <?php
-class JokeController
+
+namespace Ijdb\controllers;
+
+use \Ninja\DatabaseTable;
+
+class Joke
 {
     public function __construct(private DatabaseTable
     $jokesTable, private DatabaseTable $authorsTable) {}
@@ -43,7 +48,7 @@ class JokeController
     {
         if (isset($_POST['joke'])) {
             $joke = $_POST['joke'];
-            $joke['jokedate'] = new DateTime();
+            $joke['jokedate'] = new \DateTime();
             $joke['authorid'] = 1;
             $this->jokesTable->save($joke);
             header('location: /joke/list');
