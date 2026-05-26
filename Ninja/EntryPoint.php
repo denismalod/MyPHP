@@ -19,6 +19,8 @@ class EntryPoint
             if ($method === 'POST') {
                 $action .= 'Submit';
             }
+            $this->website->checkLogin($controllerName . '/' .
+                $action);
             $controller = $this->website->getController($controllerName);
             if (is_callable([$controller, $action])) {
                 $page = $controller->$action(...$route);
