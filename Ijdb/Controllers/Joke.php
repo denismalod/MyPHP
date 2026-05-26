@@ -30,17 +30,20 @@ class Joke
                 'joketext' => $joke['joketext'],
                 'jokedate' => $joke['jokedate'],
                 'name' => $author['name'],
-                'email' => $author['email']
+                'email' => $author['email'],
+                'authorId' => $author['id']
             ];
         }
         $title = 'Joke list';
         $totalJokes = $this->jokesTable->total();
+        $user = $this->authentication->getUser();
         return [
             'template' => 'jokes.html.php',
             'title' => $title,
             'variables' => [
                 'totalJokes' => $totalJokes,
-                'jokes' => $jokes
+                'jokes' => $jokes,
+                'userId' => $user['id'] ?? null
             ]
         ];
     }
