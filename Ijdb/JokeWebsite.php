@@ -41,4 +41,11 @@ class JokeWebsite implements \Ninja\Website
         }
         return $uri;
     }
+    
+    public function getLayoutVariables(): array
+    {
+        return [
+            'loggedIn' => $this->authentication->isLoggedIn()
+        ];
+    }
 }
