@@ -7,7 +7,8 @@ use \Ninja\DatabaseTable;
 class Joke
 {
     public function __construct(private DatabaseTable
-    $jokesTable, private DatabaseTable $authorsTable) {}
+    $jokesTable, private DatabaseTable $authorsTable, private
+    \Ninja\Authentication $authentication) {}
 
     public function home()
     {
@@ -46,9 +47,10 @@ class Joke
 
     public function editSubmit()
     {
+        $author = $this->authentication->getUser();
         $joke = $_POST['joke'];
         $joke['jokedate'] = new \DateTime();
-        $joke['authorId'] = 1;
+        $joke['authorId'] = $author['id'];
         $this->jokesTable->save($joke);
         header('location: /joke/list');
     }

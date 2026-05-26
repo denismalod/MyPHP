@@ -22,7 +22,11 @@ class JokeWebsite implements \Ninja\Website
     public function getController(string $controllerName): ?object
     {
         if ($controllerName === 'joke') {
-            $controller = new \Ijdb\Controllers\Joke($this->jokesTable, $this->authorsTable);
+            $controller = new \Ijdb\Controllers\Joke(
+                $this->jokesTable,
+                $this->authorsTable,
+                $this->authentication
+            );
         } else if ($controllerName === 'author') {
             $controller = new \Ijdb\Controllers\Author($this->authorsTable);
         } else if ($controllerName == 'login') {
@@ -41,7 +45,7 @@ class JokeWebsite implements \Ninja\Website
         }
         return $uri;
     }
-    
+
     public function getLayoutVariables(): array
     {
         return [
