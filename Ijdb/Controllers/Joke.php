@@ -3,12 +3,14 @@
 namespace Ijdb\controllers;
 
 use \Ninja\DatabaseTable;
+use \Ninja\Authentication;
+
 
 class Joke
 {
     public function __construct(private DatabaseTable
-    $jokesTable, private DatabaseTable $authorsTable, private
-    \Ninja\Authentication $authentication) {}
+    $jokesTable, private DatabaseTable $authorsTable, private DatabaseTable
+    $categoriesTable, private Authentication $authentication) {}
 
     public function home()
     {
@@ -43,26 +45,35 @@ class Joke
         }
         $joke = $_POST['joke'];
         $joke['jokedate'] = new \DateTime();
-        $author->addJoke($joke);
+        $jokeEntity = $author->addJoke($joke);
+        foreach ($_POST['category'] as $categoryId) {
+            $jokeEntity->addCategory($categoryId);
+        }
         header('location: /joke/list');
     }
 
     public function edit($id = null)
     {
-        if (isset($id)) {
-            $joke = $this->jokesTable->find('id', $id)[0] ?? null;
-        }
         $author = $this->authentication->getUser();
+        $categories = $this->categoriesTable->findAll();
+        if (!empty($id)) {
+            $joke = $this->jokesTable->find('id', $id)[0];
+        } else {
+            $joke = null;
+        }
         $title = 'Edit joke';
         return [
             'template' => 'editjoke.html.php',
             'title' => $title,
             'variables' => [
                 'joke' => $joke ?? null,
-                'userId' => $author->id 
+                'userId' => $author->id ?? null,
+                'categories' => $categories
             ]
         ];
     }
+
+
 
     public function deleteSubmit()
     {

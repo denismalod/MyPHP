@@ -6,6 +6,8 @@ class JokeWebsite implements \Ninja\Website
 {
     private ?\Ninja\DatabaseTable $jokesTable;
     private ?\Ninja\DatabaseTable $authorsTable;
+    private ?\Ninja\DatabaseTable $categoriesTable;
+    private ?\Ninja\DatabaseTable $jokeCategoriesTable;
     private \Ninja\Authentication $authentication;
     public function __construct()
     {
@@ -15,7 +17,7 @@ class JokeWebsite implements \Ninja\Website
             'joke',
             'id',
             '\Ijdb\Entity\Joke',
-            [&$this->authorsTable]
+            [&$this->authorsTable, &$this->jokeCategoriesTable]
         );
         $this->authorsTable = new \Ninja\DatabaseTable(
             $pdo,
@@ -24,7 +26,15 @@ class JokeWebsite implements \Ninja\Website
             '\Ijdb\Entity\Author',
             [&$this->jokesTable]
         );
+        $this->categoriesTable = new \Ninja\DatabaseTable(
+            $pdo,
+            'category',
+            'id'
+        );
+
         $this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');
+        $this->jokeCategoriesTable = new
+            \Ninja\DatabaseTable($pdo, 'joke_category', 'categoryId');
     }
 
     public function getDefaultRoute(): string
@@ -33,20 +43,18 @@ class JokeWebsite implements \Ninja\Website
     }
     public function getController(string $controllerName): ?object
     {
-        if ($controllerName === 'joke') {
-            $controller = new \Ijdb\Controllers\Joke(
+        $controllers = [
+            'joke' => new \Ijdb\Controllers\Joke(
                 $this->jokesTable,
                 $this->authorsTable,
+                $this->categoriesTable,
                 $this->authentication
-            );
-        } else if ($controllerName === 'author') {
-            $controller = new \Ijdb\Controllers\Author($this->authorsTable);
-        } else if ($controllerName == 'login') {
-            $controller = new \Ijdb\Controllers\Login($this->authentication);
-        } else {
-            $controller = null;
-        }
-        return $controller;
+            ),
+            'author' => new \Ijdb\Controllers\Author($this->authorsTable),
+            'login' => new \Ijdb\Controllers\login($this->authentication),
+            'category' => new \Ijdb\Controllers\Category($this->categoriesTable)
+        ];
+        return $controllers[$controllerName] ?? null;
     }
     public function checkLogin(string $uri): ?string
     {
