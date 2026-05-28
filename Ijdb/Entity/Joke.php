@@ -40,4 +40,9 @@ class Joke
         }
         return false;
     }
+
+    public function clearCategories()
+    {
+        $this->jokeCategoriesTable->delete('jokeId', $this->id);
+    }
 }
