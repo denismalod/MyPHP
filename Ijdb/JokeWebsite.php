@@ -29,7 +29,9 @@ class JokeWebsite implements \Ninja\Website
         $this->categoriesTable = new \Ninja\DatabaseTable(
             $pdo,
             'category',
-            'id'
+            'id',
+            '\Ijdb\Entity\Category',
+            [&$this->jokesTable, &$this->jokeCategoriesTable]
         );
 
         $this->authentication = new \Ninja\Authentication($this->authorsTable, 'email', 'password');

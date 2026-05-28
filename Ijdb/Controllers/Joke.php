@@ -18,9 +18,14 @@ class Joke
         return ['template' => 'home.html.php', 'title' => $title];
     }
 
-    public function list()
+    public function list($categoryId = null)
     {
-        $jokes = $this->jokesTable->findAll();
+        if (isset($categoryId)) {
+            $category = $this->categoriesTable->find('id', $categoryId)[0];
+            $jokes = $category->getJokes();
+        } else {
+            $jokes = $this->jokesTable->findAll();
+        }
         $user = $this->authentication->getUser();
         $totalJokes = $this->jokesTable->total();
         return [
@@ -29,7 +34,8 @@ class Joke
             'variables' => [
                 'jokes' => $jokes,
                 'totalJokes' => $totalJokes,
-                'userId' => $user->id ?? null
+                'userId' => $user->id ?? null,
+                'categories' => $this->categoriesTable->findAll()
             ]
         ];
     }
