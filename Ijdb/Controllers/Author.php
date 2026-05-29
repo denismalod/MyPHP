@@ -96,7 +96,7 @@ class Author
     public function permissionsSubmit($id = null)
     {
         $author = [
-            'id' => $_POST['id'],
+            'id' => $id,
             'permissions' => array_sum($_POST['permissions'] ?? [])
         ];
         $this->authorsTable->save($author);

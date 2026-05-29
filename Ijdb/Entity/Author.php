@@ -11,11 +11,11 @@ class Author
     const DELETE_CATEGORY = 16;
     const EDIT_USER_ACCESS = 32;
 
-    public int $id;
-    public string $name;
-    public string $email;
+    public ?int $id;
+    public ?string $name;
+    public ?string $email;
     public ?string $password;
-    public int $permissions;
+    public ?int $permissions;
 
     public function __construct(private \Ninja\DatabaseTable $jokesTable) {}
 
