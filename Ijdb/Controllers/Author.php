@@ -42,6 +42,7 @@ class Author
         if (empty($errors)) {
             $author['password'] = password_hash($author['password'], PASSWORD_DEFAULT);
             $this->authorsTable->save($author);
+            $author['permissions'] = 0;
             header('Location: /author/success');
         } else {
             // If the data is not valid, show the form again
@@ -63,5 +64,42 @@ class Author
             'template' => 'registersuccess.html.php',
             'title' => 'Registration Successful'
         ];
+    }
+
+    public function list()
+    {
+        $authors = $this->authorsTable->findAll();
+        return [
+            'template' => 'authorlist.html.php',
+            'title' => 'Author List',
+            'variables' => [
+                'authors' => $authors
+            ]
+        ];
+    }
+
+    public function permissions($id = null)
+    {
+        $author = $this->authorsTable->find('id', $id)[0];
+        $reflected = new \ReflectionClass('\Ijdb\Entity\Author');
+        $constants = $reflected->getConstants();
+        return [
+            'template' => 'permissions.html.php',
+            'title' => 'Edit Permissions',
+            'variables' => [
+                'author' => $author,
+                'permissions' => $constants
+            ]
+        ];
+    }
+
+    public function permissionsSubmit($id = null)
+    {
+        $author = [
+            'id' => $_POST['id'],
+            'permissions' => array_sum($_POST['permissions'] ?? [])
+        ];
+        $this->authorsTable->save($author);
+        header('location: /author/list');
     }
 }

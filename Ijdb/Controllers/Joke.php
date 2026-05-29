@@ -26,7 +26,7 @@ class Joke
         } else {
             $jokes = $this->jokesTable->findAll();
         }
-        $user = $this->authentication->getUser();
+        $author = $this->authentication->getUser();
         $totalJokes = $this->jokesTable->total();
         return [
             'template' => 'jokes.html.php',
@@ -34,7 +34,7 @@ class Joke
             'variables' => [
                 'jokes' => $jokes,
                 'totalJokes' => $totalJokes,
-                'userId' => $user->id ?? null,
+                'user' => $author,
                 'categories' => $this->categoriesTable->findAll()
             ]
         ];
@@ -45,7 +45,7 @@ class Joke
         $author = $this->authentication->getUser();
         if (!empty($id)) {
             $joke = $this->jokesTable->find('id', $id)[0];
-            if ($joke->authorId != $author->id) {
+            if ($joke->authorId != $author->id && !$author->hasPermission(\Ijdb\Entity\Author::EDIT_JOKE)) {
                 return;
             }
         }
@@ -74,7 +74,7 @@ class Joke
             'title' => $title,
             'variables' => [
                 'joke' => $joke ?? null,
-                'userId' => $author->id ?? null,
+                'user' => $author ?? null,
                 'categories' => $categories
             ]
         ];
@@ -86,9 +86,10 @@ class Joke
     {
         $author = $this->authentication->getUser();
         $joke = $this->jokesTable->find('id', $_POST['id'])[0];
-        if ($joke->authorid != $author->id) {
+        if ($joke->authorId != $author->id && !$author->hasPermission(\Ijdb\Entity\Author::DELETE_JOKE)) {
             return;
         }
+
         $this->jokesTable->delete('id', $_POST['id']);
         header('location: /joke/list');
     }

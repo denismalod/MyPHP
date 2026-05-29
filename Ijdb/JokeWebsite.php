@@ -58,15 +58,24 @@ class JokeWebsite implements \Ninja\Website
         ];
         return $controllers[$controllerName] ?? null;
     }
+
     public function checkLogin(string $uri): ?string
     {
-        $restrictedPages = ['joke/edit', 'joke/delete'];
-        if (in_array($uri, $restrictedPages) && !$this->authentication->isLoggedIn()) {
-            header('location: /login/login');
-            exit();
+        $restrictedPages = [
+            'category/list' => \Ijdb\Entity\Author::LIST_CATEGORIES
+        ];
+        if (isset($restrictedPages[$uri])) {
+            if (
+                !$this->authentication->isLoggedIn()
+                || !$this->authentication->getUser()->hasPermission($restrictedPages[$uri])
+            ) {
+                header('location: /login/login');
+                exit();
+            }
         }
         return $uri;
     }
+
 
     public function getLayoutVariables(): array
     {

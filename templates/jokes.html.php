@@ -29,14 +29,23 @@
                         $date = new DateTime($joke->jokedate);
                         echo $date->format('jS F Y');
                         ?>)
-                        <?php if ($userId == $joke->authorid): ?>
-                            <a href="/joke/edit/<?= $joke->id ?>">Edit</a>
+
+                        <?php if ($user): ?>
+                            <?php if (
+                                empty($joke) || $user->id == $joke->authorId ||
+                                $user->hasPermission(\Ijdb\Entity\Author::EDIT_JOKE)
+                            ): ?>
+                                <a href="/joke/edit/<?= $joke->id ?>">Edit</a>
+                            <?php endif; ?>
+                            <?php if ($user->id == $joke->authorId || $user->hasPermission(\Ijdb\Entity\Author::DELETE_JOKE)): ?>
                     <form action="/joke/delete" method="post">
                         <input type="hidden" name="id" value="<?= $joke->id ?>">
                         <input type="submit" value="Delete">
                     </form>
                 <?php endif; ?>
-                </p>
+            <?php endif; ?>
+
+            </p>
                 </blockquote>
             <?php endforeach; ?>
         <?php endif; ?>
